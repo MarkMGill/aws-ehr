@@ -12,7 +12,7 @@ export default function BillingPage() {
 
   if (isLoading) return <div className="panel">Loading billing records...</div>;
   if (error) return <div className="panel error-box">{error.message}</div>;
-
+  console.log(data);
   return (
     <div className="stack">
       <header className="page-header">
@@ -36,7 +36,7 @@ export default function BillingPage() {
             {(data ?? []).map((bill) => (
               <tr key={bill.id}>
                 <td>{bill.service}</td>
-                <td>${bill.amount.toFixed(2)}</td>
+                <td>${parseFloat(bill.amount).toFixed(2).toString()}</td>
                 <td>{bill.status}</td>
                 <td>{bill.dueDate}</td>
               </tr>

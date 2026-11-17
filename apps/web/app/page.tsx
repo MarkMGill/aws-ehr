@@ -13,7 +13,7 @@ export default function HomePage() {
         </p>
         <div className="cta-row">
           <Link className="button primary" href="/login">
-            Launch demo
+            Sign in
           </Link>
           <Link className="button secondary" href="/dashboard">
             Open dashboard

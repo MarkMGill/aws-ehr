@@ -1,18 +1,19 @@
-import { useAuthStore } from './store';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
+const API_URL = '/api/ehr';
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const token = useAuthStore.getState().token;
-
   const response = await fetch(`${API_URL}${path}`, {
     ...options,
+    credentials: 'same-origin',
+    cache: 'no-store',
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options.headers ?? {}),
     },
   });
+
+  if (response.status === 401 && typeof window !== 'undefined') {
+    window.location.assign('/login');
+  }
 
   if (!response.ok) {
     const payload = await response.json().catch(() => ({ message: 'Request failed.' }));

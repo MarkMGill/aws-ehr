@@ -10,9 +10,14 @@
     "build": "npm run build --workspace apps/server && npm run build --workspace apps/web",
     "lint": "npm run lint --workspace apps/web",
     "db:up": "docker compose up -d postgres",
-    "db:seed": "npm run db:seed --workspace apps/server"
+    "db:seed": "npm run db:seed --workspace apps/server",
+    "db:migrate:auth": "npm run db:migrate:auth --workspace apps/server",
+    "auth:link": "npm run auth:link --workspace apps/server --"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

@@ -13,3 +13,5 @@ coverage
 *.tfstate
 *.tfstate.*
 *.log
+
+*.tsbuildinfo

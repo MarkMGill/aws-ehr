@@ -20,25 +20,36 @@ This aligns well with how many modern teams structure EHR systems:
 
 ## Local development
 
-1. Start PostgreSQL locally:
+Requirements: Node.js 20 or newer, npm, Docker Desktop, and an AWS Cognito user pool.
+The web app, API, and PostgreSQL can run locally; no EC2 or RDS deployment is required.
+
+1. Install dependencies from the repository root:
    ```bash
-   docker compose up -d postgres
+   npm install
    ```
-2. Seed the database:
+2. Configure Cognito using [docs/cognito.md](docs/cognito.md). Next.js reads
+   `apps/web/.env.local`; Express reads `apps/server/.env`. The root `.env` is not
+   automatically shared between these processes.
+3. Start and initialize PostgreSQL:
    ```bash
-   npm run db:seed --workspace apps/server
+   npm run db:up
+   npm run db:seed
+   npm run db:migrate:auth
    ```
-3. Start both apps in development mode:
+4. Create a test Cognito user and explicitly link its `sub` to a seeded profile:
+   ```bash
+   npm run auth:link -- clinician@clinic.local YOUR_COGNITO_SUB
+   ```
+5. Start both apps:
    ```bash
    npm run dev
    ```
-4. Open the app on `http://localhost:3000` and the API on `http://localhost:4000/health`
+6. Open `http://localhost:3000/login`. The API health check is
+   `http://localhost:4000/health`.
 
-Demo logins:
-
-- `clinician@clinic.local` / `Password123!`
-- `patient@clinic.local` / `Password123!`
-- `admin@clinic.local` / `Password123!`
+The old demo passwords no longer authenticate. Seeded users are local application
+profiles; Cognito manages their login credentials. Database lookup failures deny
+access rather than falling back to a demo user.
 
 ## EHR features included
 

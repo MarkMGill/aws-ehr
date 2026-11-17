@@ -1,5 +1,5 @@
 import { hashPassword } from './auth.js';
-import { query } from './db.js';
+import { pool, query } from './db.js';
 
 const userSeed = [
   ['u-001', 'admin@clinic.local', 'Password123!', 'Ava', 'Murphy', 'admin'],
@@ -165,5 +165,5 @@ async function seed() {
 
 seed().catch((error) => {
   console.error('Seed failed:', error);
-  process.exit(1);
-});
+  process.exitCode = 1;
+}).finally(() => pool.end());

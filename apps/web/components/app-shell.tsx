@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/store';
 
 const links = [
@@ -15,14 +15,7 @@ const links = [
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
   const user = useAuthStore((state) => state.user);
-  const logout = useAuthStore((state) => state.logout);
-
-  const handleLogout = () => {
-    logout();
-    router.push('/login');
-  };
 
   return (
     <div className="shell">
@@ -51,9 +44,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <span className="eyebrow">Signed in</span>
           <strong>{user ? `${user.firstName} ${user.lastName}` : 'Guest'}</strong>
           <small>{user ? user.role : 'Not authenticated'}</small>
-          <button className="button secondary" onClick={handleLogout} type="button">
-            Log out
-          </button>
+          <form action="/api/auth/logout" method="post">
+            <button className="button secondary" type="submit">Log out</button>
+          </form>
         </div>
       </aside>
 
