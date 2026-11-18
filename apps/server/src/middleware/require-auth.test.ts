@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { generateKeyPairSync, sign } from 'node:crypto';
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 import type { Response } from 'express';
-import { createRequireAuth, type AuthenticatedRequest } from './middleware.js';
+import { createRequireAuth, type AuthenticatedRequest } from './require-auth.js';
 
 const { privateKey, publicKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
 const pool = 'us-east-2_test';
@@ -29,7 +29,7 @@ async function authenticate(bearer: string | undefined, profile?: Record<string,
     lookups++;
     assert.equal(sub, 'trusted-sub');
     if (failDb) throw new Error('offline');
-    return profile;
+    return profile ? { id: 'local-id', email: 'test@example.com', firstName: 'Test', lastName: 'User', role: 'clinician', patientId: null, ...profile } as import('../features/users/user.types.js').UserProfile : null;
   });
   await middleware(req, res, () => { next = true; });
   return { status, next, lookups, user: req.user };
@@ -57,7 +57,7 @@ test('a valid Cognito token does not grant an unlinked account access', async ()
 });
 test('roles come from the database, never from a token role claim', async () => {
   const result = await authenticate(token({ role: 'admin' }), {
-    id: 'local-id', email: 'test@example.com', role: 'patient', patient_id: 'p-001',
+    id: 'local-id', email: 'test@example.com', role: 'patient', patientId: 'p-001',
   });
   assert.equal(result.next, true);
   assert.equal(result.user?.role, 'patient');

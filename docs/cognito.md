@@ -58,13 +58,14 @@ Start Docker Desktop, then from the repository root:
 
 ```bash
 npm run db:up
+npm run db:migrate
 npm run db:seed
-npm run db:migrate:auth
 ```
 
-The auth migration adds `users.cognito_sub`, `users.patient_id`, and the
-`web_sessions` table. It is additive and safe to rerun. The seed no longer waits
-on an open PostgreSQL pool after finishing.
+Sequelize migrations create or adopt the existing tables and add `users.cognito_sub`,
+`users.patient_id`, and `web_sessions` when missing. Existing users, Cognito links,
+and session payloads are preserved. The old `db:migrate:auth` command remains an
+alias for `db:migrate`. The seed command also applies any pending migrations.
 
 ## 4. Create and link test users
 

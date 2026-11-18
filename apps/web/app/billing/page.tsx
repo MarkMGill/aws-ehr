@@ -36,7 +36,7 @@ export default function BillingPage() {
             {(data ?? []).map((bill) => (
               <tr key={bill.id}>
                 <td>{bill.service}</td>
-                <td>${parseFloat(bill.amount).toFixed(2).toString()}</td>
+                <td>${bill.amount.toFixed(2)}</td>
                 <td>{bill.status}</td>
                 <td>{bill.dueDate}</td>
               </tr>

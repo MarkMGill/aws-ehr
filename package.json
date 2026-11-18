@@ -12,7 +12,8 @@
     "db:up": "docker compose up -d postgres",
     "db:seed": "npm run db:seed --workspace apps/server",
     "db:migrate:auth": "npm run db:migrate:auth --workspace apps/server",
-    "auth:link": "npm run auth:link --workspace apps/server --"
+    "auth:link": "npm run auth:link --workspace apps/server --",
+    "db:migrate": "npm run db:migrate --workspace apps/server"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"

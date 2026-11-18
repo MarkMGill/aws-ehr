@@ -7,8 +7,8 @@ This repository is a hands-on, learning-focused EHR starter that combines a Next
 This project uses a monorepo layout so the front end and back end stay separate without making the codebase overly complex.
 
 - `apps/web` — Next.js client application
-- `apps/server` — Express.js API and database seed logic
-- `apps/server/sql/schema.sql` — PostgreSQL schema for EHR entities
+- `apps/server` — Express.js API organized by feature
+- `apps/server/src/database` — Sequelize models, versioned migrations, and seeders
 - `infra/terraform` — AWS infrastructure as code for EC2, RDS, IAM, and S3
 - `packages/shared` — shared types for future reuse
 
@@ -33,8 +33,8 @@ The web app, API, and PostgreSQL can run locally; no EC2 or RDS deployment is re
 3. Start and initialize PostgreSQL:
    ```bash
    npm run db:up
+   npm run db:migrate
    npm run db:seed
-   npm run db:migrate:auth
    ```
 4. Create a test Cognito user and explicitly link its `sub` to a seeded profile:
    ```bash
@@ -50,6 +50,9 @@ The web app, API, and PostgreSQL can run locally; no EC2 or RDS deployment is re
 The old demo passwords no longer authenticate. Seeded users are local application
 profiles; Cognito manages their login credentials. Database lookup failures deny
 access rather than falling back to a demo user.
+
+See [the backend architecture guide](docs/backend.md) for the route/controller/service
+structure, database migration workflow, and integration tests.
 
 ## EHR features included
 
